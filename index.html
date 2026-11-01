@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinguaBridge – Multilingual Translator</title>
+  <meta name="description" content="Break Language Barriers, Connect the World with LinguaBridge Claymorphic Translator">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       CSS VARIABLES & CLAYMORPHISM DESIGN SYSTEM
+       ========================================================= */
+    :root {
+      --font-main: 'Plus Jakarta Sans', sans-serif;
+      --font-heading: 'Poppins', sans-serif;
+
+      /* Light Claymorphic Palette */
+      --bg-base: #e6ebf5;
+      --bg-surface: #edf1f9;
+      --bg-surface-elevated: #f4f7fc;
+      --text-main: #2b354f;
+      --text-muted: #64748b;
+      --primary: #5c67f2;
+      --primary-hover: #4d57e6;
+      --accent: #8b5cf6;
+      --border-color: rgba(255, 255, 255, 0.6);
+      --danger: #ef4444;
+      --success: #10b981;
+
+      /* Multi-layer Clay Shadows */
+      --clay-shadow-sm: 8px 8px 16px rgba(166, 180, 200, 0.45),
+                        -8px -8px 16px rgba(255, 255, 255, 0.85),
+                        inset 2px 2px 4px rgba(255, 255, 255, 0.6),
+                        inset -2px -2px 4px rgba(166, 180, 200, 0.2);
+
+      --clay-shadow-card: 14px 14px 28px rgba(166, 180, 200, 0.45),
+                          -14px -14px 28px rgba(255, 255, 255, 0.9),
+                          inset 2px 2px 5px rgba(255, 255, 255, 0.7),
+                          inset -3px -3px 6px rgba(166, 180, 200, 0.25);
+
+      --clay-shadow-inset: inset 6px 6px 12px rgba(166, 180, 200, 0.4),
+                           inset -6px -6px 12px rgba(255, 255, 255, 0.85);
+
+      --clay-shadow-btn: 6px 6px 14px rgba(92, 103, 242, 0.35),
+                         -4px -4px 10px rgba(255, 255, 255, 0.8),
+                         inset 2px 2px 4px rgba(255, 255, 255, 0.4),
+                         inset -2px -2px 4px rgba(0, 0, 0, 0.15);
+
+      --clay-btn-active: inset 4px 4px 8px rgba(0, 0, 0, 0.25),
+                         inset -2px -2px 4px rgba(255, 255, 255, 0.2);
+
+      --radius-sm: 14px;
+      --radius-md: 20px;
+      --radius-lg: 32px;
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+      --bg-base: #131722;
+      --bg-surface: #1a202e;
+      --bg-surface-elevated: #22293b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --accent: #a855f7;
+      --border-color: rgba(255, 255, 255, 0.08);
+
+      --clay-shadow-sm: 6px 6px 14px rgba(7, 9, 14, 0.7),
+                        -5px -5px 12px rgba(35, 43, 62, 0.6),
+                        inset 1px 1px 2px rgba(255, 255, 255, 0.1),
+                        inset -2px -2px 4px rgba(0, 0, 0, 0.4);
+
+      --clay-shadow-card: 12px 12px 28px rgba(5, 7, 12, 0.8),
+                          -10px -10px 24px rgba(36, 45, 66, 0.5),
+                          inset 1px 1px 3px rgba(255, 255, 255, 0.12),
+                          inset -2px -2px 5px rgba(0, 0, 0, 0.5);
+
+      --clay-shadow-inset: inset 5px 5px 10px rgba(5, 7, 12, 0.8),
+                           inset -5px -5px 10px rgba(38, 48, 70, 0.4);
+
+      --clay-shadow-btn: 6px 6px 14px rgba(0, 0, 0, 0.5),
+                         -3px -3px 8px rgba(45, 55, 80, 0.5),
+                         inset 2px 2px 3px rgba(255, 255, 255, 0.2),
+                         inset -2px -2px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+    .blob-1 {
+      width: 450px;
+      height: 450px;
+      top: -120px;
+      right: -80px;
+      background: radial-gradient(circle, #a78bfa, #818cf8);
+    }
+    .blob-2 {
+      width: 400px;
+      height: 400px;
+      bottom: -100px;
+      left: -100px;
+      background: radial-gradient(circle, #93c5fd, #c4b5fd);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navbar */
+    .navbar {
+      margin-top: 18px;
+      margin-bottom: 24px;
+    }
+    .nav-card {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      padding: 14px 28px;
+      box-shadow: var(--clay-shadow-card);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--border-color);
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      box-shadow: var(--clay-shadow-btn);
+    }
+    .nav-title {
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+    .nav-tagline {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: -2px;
+    }
+
+    /* Buttons */
+    .clay-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      font-family: var(--font-main);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--bg-surface);
+      color: var(--text-main);
+      box-shadow: var(--clay-shadow-sm);
+      transition: var(--transition);
+      user-select: none;
+    }
+    .clay-btn:hover { transform: translateY(-2px); }
+    .clay-btn:active { transform: translateY(1px); box-shadow: var(--clay-btn-active); }
+
+    .clay-btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #ffffff;
+      box-shadow: var(--clay-shadow-btn);
+      border: none;
+    }
+    .clay-btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-hover), var(--accent));
+      box-shadow: 0 10px 22px rgba(92, 103, 242, 0.45);
+    }
+    .clay-btn-icon {
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border-radius: 50%;
+    }
+
+    /* Translator Card */
+    .translator-wrapper {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--clay-shadow-card);
+      border: 1px solid var(--border-color);
+      margin-bottom: 30px;
+    }
+    .lang-toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .lang-picker-group {
+      position: relative;
+    }
+    .clay-select {
+      width: 100%;
+      appearance: none;
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: var(--font-main);
+      box-shadow: var(--clay-shadow-sm);
+      cursor: pointer;
+      outline: none;
+      transition: var(--transition);
+    }
+    .select-arrow {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--text-muted);
+    }
+    .swap-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--bg-surface-elevated);
+      color: var(--primary);
+      box-shadow: var(--clay-shadow-sm);
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    .swap-btn:hover {
+      transform: rotate(180deg) scale(1.05);
+      color: var(--accent);
+    }
+
+    /* Panels */
+    .panels-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 22px;
+    }
+    .clay-panel {
+      background: var(--bg-surface-elevated);
+      border-radius: var(--radius-md);
+      box-shadow: var(--clay-shadow-inset);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      height: 300px;
+      position: relative;
+      border: 1px solid var(--border-color);
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .panel-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+    }
+    .char-badge {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .clay-textarea {
+      flex: 1;
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      resize: none;
+      color: var(--text-main);
+      font-family: var(--font-main);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+    .clay-textarea::placeholder {
+      color: var(--text-muted);
+      opacity: 0.65;
+    }
+    .output-area {
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .output-area.placeholder-text {
+      color: var(--text-muted);
+      opacity: 0.65;
+      font-style: italic;
+    }
+    .panel-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-color);
+    }
+    .action-icons {
+      display: flex;
+      gap: 8px;
+    }
+    .icon-action-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      border-radius: 10px;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--clay-shadow-sm);
+      transition: var(--transition);
+    }
+    .icon-action-btn:hover {
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .icon-action-btn.active {
+      color: #eab308;
+    }
+
+    .controls-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 16px;
+    }
+    .translate-btn {
+      padding: 14px 38px;
+      font-size: 1.05rem;
+      border-radius: var(--radius-sm);
+    }
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #ffffff;
+      animation: spin 0.8s ease-in-out infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* History & Favorites */
+    .history-card {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--clay-shadow-card);
+      border: 1px solid var(--border-color);
+      margin-bottom: 50px;
+    }
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .tab-group {
+      display: flex;
+      gap: 10px;
+    }
+    .tab-btn {
+      padding: 8px 18px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface-elevated);
+      color: var(--text-muted);
+      cursor: pointer;
+      box-shadow: var(--clay-shadow-sm);
+      transition: var(--transition);
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: var(--clay-shadow-btn);
+    }
+    .history-search-input {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--clay-shadow-inset);
+      border-radius: var(--radius-sm);
+      padding: 8px 16px;
+      font-size: 0.88rem;
+      color: var(--text-main);
+      outline: none;
+      width: 240px;
+    }
+    .history-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 18px;
+    }
+    .history-item {
+      background: var(--bg-surface-elevated);
+      border-radius: var(--radius-md);
+      box-shadow: var(--clay-shadow-sm);
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition);
+    }
+    .history-item:hover { transform: translateY(-2px); }
+    .history-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .history-item-date {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .history-original {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .history-translated {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .history-item-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-color);
+    }
+    .empty-state {
+      text-align: center;
+      padding: 40px 10px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      grid-column: 1 / -1;
+    }
+    .shared-notice {
+      background: rgba(92, 103, 242, 0.08);
+      border: 1px dashed var(--primary);
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      margin-bottom: 18px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Toasts */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 9999;
+    }
+    .toast {
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+      padding: 14px 20px;
+      border-radius: var(--radius-sm);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 280px;
+      animation: slideIn 0.3s ease forwards;
+    }
+    .toast.success { border-left: 5px solid var(--success); }
+    .toast.error { border-left: 5px solid var(--danger); }
+    .toast.info { border-left: 5px solid var(--primary); }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .panels-grid { grid-template-columns: 1fr; }
+      .lang-toolbar { grid-template-columns: 1fr 40px 1fr; gap: 8px; }
+      .clay-panel { height: 240px; }
+      .history-header { flex-direction: column; align-items: stretch; }
+      .history-search-input { width: 100%; }
+      .nav-title { font-size: 1.2rem; }
+      .nav-tagline { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="container">
+    <!-- Navigation Bar -->
+    <header class="navbar">
+      <div class="nav-card">
+        <a href="#" class="nav-brand">
+          <div class="nav-logo-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/>
+            </svg>
+          </div>
+          <div>
+            <div class="nav-title">LinguaBridge</div>
+            <div class="nav-tagline">Break Language Barriers, Connect the World.</div>
+          </div>
+        </a>
+        <div class="nav-actions">
+          <button id="themeToggleBtn" class="clay-btn clay-btn-icon" title="Toggle Theme" aria-label="Toggle Theme">
+            <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Translator Workspace -->
+    <main class="translator-wrapper">
+      <div class="lang-toolbar">
+        <div class="lang-picker-group">
+          <select id="sourceLangSelect" class="clay-select" aria-label="Source Language">
+            <option value="autodetect">Auto Detect</option>
+            <option value="en" selected>English</option>
+            <option value="mr">Marathi (मराठी)</option>
+            <option value="hi">Hindi (हिन्दी)</option>
+            <option value="es">Spanish (Español)</option>
+            <option value="fr">French (Français)</option>
+            <option value="de">German (Deutsch)</option>
+          </select>
+          <div class="select-arrow">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+
+        <button id="swapLangBtn" class="swap-btn" title="Swap Languages" aria-label="Swap Languages">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/>
+          </svg>
+        </button>
+
+        <div class="lang-picker-group">
+          <select id="targetLangSelect" class="clay-select" aria-label="Target Language">
+            <option value="mr" selected>Marathi (मराठी)</option>
+            <option value="hi">Hindi (हिन्दी)</option>
+            <option value="en">English</option>
+            <option value="es">Spanish (Español)</option>
+            <option value="fr">French (Français)</option>
+            <option value="de">German (Deutsch)</option>
+          </select>
+          <div class="select-arrow">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="panels-grid">
+        <!-- Source Input Panel -->
+        <section class="clay-panel">
+          <div class="panel-header">
+            <span class="panel-title">Source Text</span>
+            <span id="charCount" class="char-badge">0 / 2000</span>
+          </div>
+          <textarea id="sourceText" class="clay-textarea" placeholder="Type or paste text to translate..." maxlength="2000"></textarea>
+          <div class="panel-footer">
+            <div class="action-icons">
+              <button id="clearSourceBtn" class="icon-action-btn" title="Clear text">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+            <span id="detectedLangBadge" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;"></span>
+          </div>
+        </section>
+
+        <!-- Translation Output Panel -->
+        <section class="clay-panel">
+          <div class="panel-header">
+            <span class="panel-title">Translation</span>
+            <span id="statusIndicator" style="font-size:0.75rem; color:var(--success); font-weight:600;"></span>
+          </div>
+          <div id="targetText" class="clay-textarea output-area placeholder-text">Translation will appear here...</div>
+          <div class="panel-footer">
+            <div class="action-icons">
+              <button id="copyTargetBtn" class="icon-action-btn" title="Copy Translation">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="controls-bar">
+        <button id="translateBtn" class="clay-btn clay-btn-primary translate-btn">
+          <span class="spinner" id="loadingSpinner"></span>
+          <span id="translateBtnText">Translate Now</span>
+        </button>
+      </div>
+    </main>
+
+    <!-- History & Saved Translations -->
+    <section class="history-card">
+      <div class="shared-notice">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+        <span><strong>Live MongoDB Atlas Shared History:</strong> Translations are recorded directly in MongoDB Atlas and shared across all active demo sessions.</span>
+      </div>
+
+      <div class="history-header">
+        <div class="tab-group">
+          <button id="tabAll" class="tab-btn active">All History</button>
+          <button id="tabFavorites" class="tab-btn">Favorites ★</button>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <input type="text" id="historySearch" class="history-search-input" placeholder="Search saved records...">
+          <button id="clearAllHistoryBtn" class="clay-btn" style="color:var(--danger);" title="Clear entire history">
+            Clear All
+          </button>
+        </div>
+      </div>
+
+      <div id="historyList" class="history-grid"></div>
+    </section>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- Vanilla JavaScript Logic -->
+  <script>
+    // Automatically selects localhost during development or standard /api path when deployed
+    const API_BASE = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')
+      ? 'http://localhost:8080/api'
+      : '/api';
+
+    const sourceLangSelect = document.getElementById('sourceLangSelect');
+    const targetLangSelect = document.getElementById('targetLangSelect');
+    const swapLangBtn = document.getElementById('swapLangBtn');
+    const sourceText = document.getElementById('sourceText');
+    const targetText = document.getElementById('targetText');
+    const translateBtn = document.getElementById('translateBtn');
+    const translateBtnText = document.getElementById('translateBtnText');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const charCount = document.getElementById('charCount');
+    const clearSourceBtn = document.getElementById('clearSourceBtn');
+    const copyTargetBtn = document.getElementById('copyTargetBtn');
+    const detectedLangBadge = document.getElementById('detectedLangBadge');
+    const historyList = document.getElementById('historyList');
+    const tabAll = document.getElementById('tabAll');
+    const tabFavorites = document.getElementById('tabFavorites');
+    const historySearch = document.getElementById('historySearch');
+    const clearAllHistoryBtn = document.getElementById('clearAllHistoryBtn');
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const toastContainer = document.getElementById('toast-container');
+
+    let currentTab = 'all';
+
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          ${type === 'success' 
+            ? '<path d="M20 6 9 17l-5-5"/>' 
+            : type === 'error' 
+              ? '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>'
+              : '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'}
+        </svg>
+        <span>${message}</span>
+      `;
+      toastContainer.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // Theme Toggle
+    themeToggleBtn.addEventListener('click', () => {
+      const isDark = document.body.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.body.removeAttribute('data-theme');
+        localStorage.setItem('lb_theme', 'light');
+      } else {
+        document.body.setAttribute('data-theme', 'dark');
+        localStorage.setItem('lb_theme', 'dark');
+      }
+    });
+
+    if (localStorage.getItem('lb_theme') === 'dark') {
+      document.body.setAttribute('data-theme', 'dark');
+    }
+
+    // Character Counter
+    sourceText.addEventListener('input', () => {
+      const length = sourceText.value.length;
+      charCount.textContent = `${length} / 2000`;
+      if (length === 0) {
+        targetText.textContent = 'Translation will appear here...';
+        targetText.classList.add('placeholder-text');
+        detectedLangBadge.textContent = '';
+      }
+    });
+
+    clearSourceBtn.addEventListener('click', () => {
+      sourceText.value = '';
+      targetText.textContent = 'Translation will appear here...';
+      targetText.classList.add('placeholder-text');
+      charCount.textContent = '0 / 2000';
+      detectedLangBadge.textContent = '';
+      sourceText.focus();
+    });
+
+    // Language Swapper
+    swapLangBtn.addEventListener('click', () => {
+      const src = sourceLangSelect.value;
+      const tgt = targetLangSelect.value;
+
+      if (src === 'autodetect') {
+        showToast('Auto Detect cannot be set as the target language.', 'error');
+        return;
+      }
+
+      sourceLangSelect.value = tgt;
+      targetLangSelect.value = src;
+
+      if (!targetText.classList.contains('placeholder-text') && targetText.textContent.trim()) {
+        const temp = sourceText.value;
+        sourceText.value = targetText.textContent;
+        targetText.textContent = temp;
+      }
+    });
+
+    // Translation Dispatch
+    async function executeTranslation() {
+      const text = sourceText.value.trim();
+      if (!text) {
+        showToast('Please enter text to translate.', 'error');
+        return;
+      }
+
+      const sourceLang = sourceLangSelect.value;
+      const targetLang = targetLangSelect.value;
+
+      if (sourceLang === targetLang) {
+        showToast('Source and Target languages must be different.', 'error');
+        return;
+      }
+
+      translateBtn.disabled = true;
+      loadingSpinner.style.display = 'inline-block';
+      translateBtnText.textContent = 'Translating...';
+
+      try {
+        const response = await fetch(`${API_BASE}/translate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: text,
+            sourceLanguage: sourceLang,
+            targetLanguage: targetLang
+          })
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.message || 'Translation service failed.');
+        }
+
+        const data = await response.json();
+        targetText.textContent = data.translatedText;
+        targetText.classList.remove('placeholder-text');
+
+        if (data.detectedSourceLanguage && sourceLang === 'autodetect') {
+          detectedLangBadge.textContent = `Detected: ${data.detectedSourceLanguage.toUpperCase()}`;
+        }
+
+        showToast('Translation completed successfully!', 'success');
+        fetchHistory();
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        translateBtn.disabled = false;
+        loadingSpinner.style.display = 'none';
+        translateBtnText.textContent = 'Translate Now';
+      }
+    }
+
+    translateBtn.addEventListener('click', executeTranslation);
+
+    // Copy to Clipboard
+    copyTargetBtn.addEventListener('click', () => {
+      if (targetText.classList.contains('placeholder-text') || !targetText.textContent.trim()) {
+        showToast('Nothing to copy.', 'error');
+        return;
+      }
+      navigator.clipboard.writeText(targetText.textContent)
+        .then(() => showToast('Copied to clipboard!', 'success'))
+        .catch(() => showToast('Failed to copy text.', 'error'));
+    });
+
+    // History & Favorites Fetching
+    async function fetchHistory(searchQuery = '') {
+      try {
+        const url = currentTab === 'favorites'
+          ? `${API_BASE}/favorites`
+          : `${API_BASE}/history${searchQuery ? `?search=${encodeURIComponent(searchQuery)}` : ''}`;
+
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Could not retrieve records.');
+        const items = await res.json();
+        renderHistory(items);
+      } catch (e) {
+        historyList.innerHTML = `<div class="empty-state">Unable to load history. Verify Spring Boot is running and connected to MongoDB.</div>`;
+      }
+    }
+
+    function renderHistory(items) {
+      if (!items || items.length === 0) {
+        historyList.innerHTML = `<div class="empty-state">No translation records found.</div>`;
+        return;
+      }
+
+      historyList.innerHTML = items.map(item => `
+        <article class="history-item">
+          <div>
+            <div class="history-item-header">
+              <span>${item.sourceLanguage.toUpperCase()} ➔ ${item.targetLanguage.toUpperCase()}</span>
+              <span class="history-item-date">${new Date(item.timestamp).toLocaleDateString()}</span>
+            </div>
+            <p class="history-original">“${escapeHtml(item.originalText)}”</p>
+            <p class="history-translated">${escapeHtml(item.translatedText)}</p>
+          </div>
+          <div class="history-item-actions">
+            <button class="icon-action-btn ${item.favorite ? 'active' : ''}" onclick="toggleFavoriteRecord('${item.id}')" title="Toggle Favorite">
+              ★
+            </button>
+            <button class="icon-action-btn" onclick="reuseRecord('${encodeURIComponent(item.originalText)}', '${item.sourceLanguage}', '${item.targetLanguage}')" title="Reuse translation">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            </button>
+            <button class="icon-action-btn" onclick="deleteHistoryRecord('${item.id}')" title="Delete record" style="color:var(--danger);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+            </button>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    window.toggleFavoriteRecord = async function(id) {
+      try {
+        const res = await fetch(`${API_BASE}/favorites/${id}`, { method: 'PUT' });
+        if (!res.ok) throw new Error('Could not update favorite.');
+        fetchHistory(historySearch.value);
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    };
+
+    window.deleteHistoryRecord = async function(id) {
+      if (!confirm('Delete this translation record?')) return;
+      try {
+        const res = await fetch(`${API_BASE}/history/${id}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Could not delete record.');
+        showToast('Record deleted.', 'success');
+        fetchHistory(historySearch.value);
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    };
+
+    window.reuseRecord = function(encodedText, src, tgt) {
+      const text = decodeURIComponent(encodedText);
+      sourceText.value = text;
+      sourceLangSelect.value = src;
+      targetLangSelect.value = tgt;
+      charCount.textContent = `${text.length} / 2000`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      executeTranslation();
+    };
+
+    clearAllHistoryBtn.addEventListener('click', async () => {
+      if (!confirm('Permanently wipe all translation history from MongoDB?')) return;
+      try {
+        const res = await fetch(`${API_BASE}/history`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Failed to clear database records.');
+        showToast('History wiped successfully.', 'success');
+        fetchHistory();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    tabAll.addEventListener('click', () => {
+      tabAll.classList.add('active');
+      tabFavorites.classList.remove('active');
+      currentTab = 'all';
+      fetchHistory(historySearch.value);
+    });
+
+    tabFavorites.addEventListener('click', () => {
+      tabFavorites.classList.add('active');
+      tabAll.classList.remove('active');
+      currentTab = 'favorites';
+      fetchHistory();
+    });
+
+    let searchDebounce = null;
+    historySearch.addEventListener('input', (e) => {
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(() => {
+        fetchHistory(e.target.value.trim());
+      }, 300);
+    });
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>"']/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+      });
+    }
+
+    // Initial load
+    fetchHistory();
+  </script>
+</body>
+</html>
